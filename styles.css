@@ -1,0 +1,23 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#gameboardContainer {
+    display: grid;
+    grid: 1fr 600px 1fr / 1fr 600px 1fr;
+}
+
+#gameboardTiles {
+    grid-area: 2 / 2 / 3 / 3;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    grid-auto-rows: 1fr;
+    list-style: none;
+}
+
+.tile {
+    background-color: lightgray;
+    border: solid 1px black;
+}
