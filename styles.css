@@ -1,3 +1,8 @@
+@font-face {
+    font-family: tictactoe;
+    src: url(font/KGWhattheTeacherWants.ttf);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -5,19 +10,110 @@
 }
 
 #gameboardContainer {
+    width: 100vw;
+    height: 100vh;
     display: grid;
-    grid: 1fr 600px 1fr / 1fr 600px 1fr;
+    grid: 1fr 525px .5fr / 1fr 525px 1fr;
+}
+
+#gameInfoContainer {
+    margin-top: 2rem;
+    grid-area: 1 / 2 / 2 / 3;
+    display: grid;
+    grid-template-rows: 1fr 2fr;
+}
+
+#gameInfo {
+    grid-area: 2 / 1 / 3 / 2;
+    font-family: tictactoe, sans-serif;
+    font-size: 6rem;
+    text-align: center;
+}
+
+#resetBtnContainer {
+    grid-area: 1 / 1 / 2 / 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#resetBtn {
+    font-size: 2rem;
+    font-family: tictactoe, sans-serif;
+    flex-basis: 250px;
+    flex-grow: 0;
+    height: 75px;
+}
+
+#playerOneContainer {
+    grid-area: 1 / 1 / 2 / 2;
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+#playerTwoContainer {
+    grid-area: 1 / 3 / 2 / 4;
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+#markerOne {
+    grid-area: 1 / 1 / 2 / 2;
+    color: red;
+}
+
+#markerTwo {
+    grid-area: 1 / 1 / 2 / 2;
+    color: blue;
+}
+
+#markerOne, #markerTwo {
+    font-family: tictactoe, sans-serif;
+    font-size: 5rem;
+    font-weight: 500;
+    place-self: center;
+}
+
+.player {
+    place-self: center;
+    font-family: tictactoe, sans-serif;
+    font-size: 4rem;
+    font-weight: 600;
+    padding: .5rem;
 }
 
 #gameboardTiles {
     grid-area: 2 / 2 / 3 / 3;
     display: grid;
-    grid-template-columns: repeat(3, 1fr); 
-    grid-auto-rows: 1fr;
+    grid-template-columns: repeat(3, 175px); 
+    grid-auto-rows: 175px;
     list-style: none;
 }
 
 .tile {
-    background-color: lightgray;
-    border: solid 1px black;
+    font-family: tictactoe, sans-serif;
+    font-size: 10rem;
+    font-weight: 700;
+    border-right: 5px solid black; 
+    border-bottom: 5px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 2rem;
+}
+
+.tile:nth-child(3n) {
+    border-right: none;
+}
+
+.tile:nth-last-child(-n+3) {
+    border-bottom: none;
+}
+
+.redMarker {
+    color: red;
+}
+
+.blueMarker {
+    color: blue;
 }
