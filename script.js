@@ -2,15 +2,19 @@
 let gameboard = {
     board: [],
 
-    init: function() {
+    init: async function() {
         this.cacheDom();
-        players.addPlayerNames();
-        players.createPlayer(players.playerNames[0], "x");
-        players.createPlayer(players.playerNames[1], "o");
         this.addBoardTiles();
         this.render();
-        players.showPlayerNames();
-        this.resetBtn.addEventListener('click', gameplay.restartGame);
+        this.newGameBtn.addEventListener('click', gameplay.restartGame);
+        this.changePlayersBtn.addEventListener('click', players.changePlayers.bind(players));
+
+        if (!players.playerNames[0] || !players.playerNames[1]) {
+            await players.addPlayerNames();
+            players.createPlayer(players.playerNames[0], "x");
+            players.createPlayer(players.playerNames[1], "o");
+            players.showPlayerNames();
+        }
     },
 
     addBoardTiles: function () {
@@ -26,18 +30,19 @@ let gameboard = {
     },
     
     cacheDom: function() {
-        this.gameboardContainer = document.getElementById('gameboardContainer');
-        this.ul = this.gameboardContainer.querySelector('#gameboardTiles');
+        this.container = document.querySelector('.container');
+        this.ul = this.container.querySelector('.gameboardTiles');
         this.tileList = this.ul.querySelectorAll('.tile');
-        this.player1 = document.getElementById('playerOne');
-        this.player2 = document.getElementById('playerTwo');
-        this.gameText = document.getElementById('gameInfo');
-        this.resetBtn = this.gameboardContainer.querySelector('#resetBtn');
+        this.player1 = document.querySelector('.player_one');
+        this.player2 = document.querySelector('.player_two');
+        this.gameText = document.querySelector('.game_info');
+        this.newGameBtn = this.container.querySelector('.new_game_btn');
+        this.changePlayersBtn = this.container.querySelector('.change_players_btn');
+        this.customPrompt = document.querySelector('.custom_prompt_container');
+        this.playersContainer = this.container.querySelector('.players_container');
     },
 
     render: function() {
-        const player = gameplay.playerSelection(); 
-
         while (this.ul.firstChild) {
             this.ul.removeChild(this.ul.firstChild);
         }
@@ -65,13 +70,30 @@ let gameboard = {
 
         });
     },
-
-    
 }
 
 //Player Creation
 let players = {
     playerList: [],
+
+    customPrompt: async function(data) {
+        document.querySelector('.prompt_input').value = '';
+        document.querySelector('.prompt_data').textContent = data;
+        gameboard.customPrompt.classList.remove('hidden');
+        gameboard.customPrompt.classList.add('flex');
+
+        if (!gameboard.playersContainer.classList.contains('hidden')) {
+            gameboard.playersContainer.classList.add('hidden');
+        }
+
+        return new Promise((resolve, reject) => {
+            document.querySelector('.prompt_button').onclick = () => {
+                resolve(document.querySelector('.prompt_input').value);
+                gameboard.customPrompt.classList.remove('flex');
+                gameboard.customPrompt.classList.add('hidden');
+            }
+        });
+    },
     
     createPlayer: function(name, markerType) {
         const player = {
@@ -83,15 +105,48 @@ let players = {
 
     playerNames: [],
 
-    addPlayerNames: function() {
-        const player1 = prompt("Player 1, what is your name?");
-        const player2 = prompt("Player 2, what is your name?");
-        this.playerNames = [player1, player2];
+    addPlayerNames: async function() {
+        try {
+            let player1 = await this.customPrompt("Player 1, What is your name?");
+            let player2 = await this.customPrompt("Player 2, What is your name?");
+
+            let trimmedPlayer1 = player1.replace(/\s/g, '');
+            let trimmedPlayer2 = player2.replace(/\s/g, '');
+
+            if (!trimmedPlayer1) {
+                if (!trimmedPlayer2) {
+                    player2 = 'Player 2';
+                }
+                
+                player1 = 'Player 1';
+            }
+    
+            this.playerNames = [player1, player2];
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+    changePlayers: async function () {
+
+        this.playerNames = [];
+        this.playerList = [];
+        gameboard.player1.textContent = '';
+        gameboard.player2.textContent = '';
+        await players.addPlayerNames();
+        players.createPlayer(players.playerNames[0], "x");
+        players.createPlayer(players.playerNames[1], "o");
+        players.showPlayerNames();
+        gameplay.restartGame();
     },
 
     showPlayerNames: function() {
         gameboard.player1.textContent = players.playerList[0].name;
         gameboard.player2.textContent = players.playerList[1].name;
+
+        if (gameboard.player1.textContent && gameboard.player2.textContent) {
+            gameboard.playersContainer.classList.remove('hidden');
+        }
     },
 }
 
@@ -134,7 +189,6 @@ let gameplay = {
             gameplay.isWinningMove = true;
             gameboard.gameText.textContent = `${player.name} Wins!`;
         } else if (this.clicks === 9 && !isWinningMove) {
-            console.log("tie");
             gameboard.gameText.textContent = "It's a Tie!";
         }
         gameboard.render();
@@ -171,11 +225,8 @@ let gameplay = {
             gameplay.clicks = 0;
             gameboard.cacheDom();
             gameboard.board = [];
-            players.playerList = [];
             gameplay.isWinningMove = false;
             gameboard.gameText.textContent = '';
-            gameboard.player1.textContent = '';
-            gameboard.player2.textContent = '';
             gameboard.init();
         },
         

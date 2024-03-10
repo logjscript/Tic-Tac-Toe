@@ -1,105 +1,188 @@
+/* font */
 @font-face {
     font-family: tictactoe;
     src: url(font/KGWhattheTeacherWants.ttf);
 }
 
+
+/* everything */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: tictactoe, sans-serif;
 }
 
-#gameboardContainer {
+.hidden {
+    display: none;
+}
+
+.flex {
+    display: flex;
+}
+
+
+/* custom prompt */
+.custom_prompt_container {
+    position: absolute;
+    justify-content: center;
+    align-items: center;
     width: 100vw;
     height: 100vh;
-    display: grid;
-    grid: 1fr 525px .5fr / 1fr 525px 1fr;
+    background-color: rgba(0, 0, 0, .6);
 }
 
-#gameInfoContainer {
-    margin-top: 2rem;
-    grid-area: 1 / 2 / 2 / 3;
-    display: grid;
-    grid-template-rows: 1fr 2fr;
+.custom_prompt {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    font-size: 2rem;
+    width: 450px;
+    height: 200px;
+    background-color: white;
+    color: black;
+    border: 4px solid black;
+    border-radius: 20px;
 }
 
-#gameInfo {
-    grid-area: 2 / 1 / 3 / 2;
-    font-family: tictactoe, sans-serif;
-    font-size: 6rem;
-    text-align: center;
-}
-
-#resetBtnContainer {
-    grid-area: 1 / 1 / 2 / 2;
+.prompt_input_container {
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: .5rem;
 }
 
-#resetBtn {
-    font-size: 2rem;
-    font-family: tictactoe, sans-serif;
-    flex-basis: 250px;
-    flex-grow: 0;
-    height: 75px;
+.prompt_input {
+    width: 250px;
+    height: 40px;
+    padding-left: .5rem;
+    font-size: 1.5rem;
+    border: 3px solid black;
+    border-radius: 5px;
 }
 
-#playerOneContainer {
-    grid-area: 1 / 1 / 2 / 2;
-    display: grid;
-    grid-template-columns: auto auto;
+.prompt_button {
+    width: 60px;
+    height: 40px;
+    font-size: 1.25rem;
+    border: 2px solid black;
+    border-radius: 5px;
 }
 
-#playerTwoContainer {
-    grid-area: 1 / 3 / 2 / 4;
-    display: grid;
-    grid-template-columns: auto auto;
+
+/* parent containers */
+.container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-#markerOne {
-    grid-area: 1 / 1 / 2 / 2;
-    color: red;
+.top_container { 
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem 2rem 0 calc(35px + 2rem);
+    gap: 2rem;
 }
 
-#markerTwo {
-    grid-area: 1 / 1 / 2 / 2;
-    color: blue;
+/* players section */
+.player_one_container {
+    position: relative;
+    margin-bottom: .5rem;
 }
 
-#markerOne, #markerTwo {
-    font-family: tictactoe, sans-serif;
-    font-size: 5rem;
-    font-weight: 500;
-    place-self: center;
+.player_two_container {
+    position: relative;
 }
 
 .player {
     place-self: center;
-    font-family: tictactoe, sans-serif;
-    font-size: 4rem;
+    font-size: 2rem;
     font-weight: 600;
-    padding: .5rem;
 }
 
-#gameboardTiles {
-    grid-area: 2 / 2 / 3 / 3;
-    display: grid;
-    grid-template-columns: repeat(3, 175px); 
-    grid-auto-rows: 175px;
-    list-style: none;
+.marker_one {
+    color: red;
 }
 
-.tile {
-    font-family: tictactoe, sans-serif;
-    font-size: 10rem;
-    font-weight: 700;
-    border-right: 5px solid black; 
-    border-bottom: 5px solid black;
+.marker_two {
+    color: blue;
+}
+
+.marker_one, .marker_two {
+    position: absolute;
+    bottom: -6px;
+    left: -35px;
+    font-size: 3rem;
+    font-weight: 500;
+}
+
+
+/* result section */
+.game_info_container {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-bottom: 2rem;
+}
+
+.game_info {
+    font-size: calc(3rem + 1.35vw);
+    text-align: center;
+}
+
+/* event buttons */
+.buttons_container {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.new_game_btn {
+    padding: .5rem;
+    font-size: 1.25rem;
+    border-radius: 5px;
+    border: 2px solid black;
+}
+
+.change_players_btn {
+    padding: .5rem;
+    font-size: 1.25rem;
+    border-radius: 5px;
+    border: 2px solid black;
+}
+
+
+/* board  */
+.board_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.gameboardTiles {
+    display: grid;
+    grid-template-columns: repeat(3, 33.3%); 
+    grid-auto-rows: 33.3%;
+    list-style: none;
+    place-content: center;
+    width: 30%;
+    min-width: 450px;
+    aspect-ratio: 1;
+}
+
+.tile {
+    font-size: calc(6vw + 6vh);
+    font-weight: 700;
+    border-right: 7px solid black; 
+    border-bottom: 7px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: .25em;
 }
 
 .tile:nth-child(3n) {
